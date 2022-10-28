@@ -1,0 +1,15 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет Posts -->
+{% block title %}
+{{ flatpage.title }}
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все публикации -->
+{% block content %}
+<hr>
+<h1></h1>
+<p><p>Не понимаю, как сюда вывести все публикации(новости и статьи) из БД:(<p>
+    <p> HELP ME PLEASE !!!<p><p>
+{% endblock content %}
