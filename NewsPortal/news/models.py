@@ -5,8 +5,7 @@ from django.db.models import Sum
 #############################################################################################################
 
 class Author(models.Model):
-    name_author = models.CharField(max_length=50)
-    user = models.OneToOneField(User, on_delete=models.PROTECT)        #cвязь «один к одному» с встроенной моделью User
+    name_author = models.OneToOneField(User, on_delete=models.CASCADE)  #cвязь «один к одному» с встроенной моделью User
     rating = models.IntegerField(default = 0)
 
 # !!!Далее будет украденный кусок кода, который немного изменен и в котором я так ничего толком и не понял!!!
@@ -40,7 +39,7 @@ POSITIONS = [
 ]
 
 class Category(models.Model):
-    name_category = models.CharField(max_length=30, choices = POSITIONS, default = technology, unique = True)
+    name_category = models.CharField(max_length=10, choices = POSITIONS, default = technology, unique = True)
 
 ###############################################################################################################
 
@@ -54,8 +53,8 @@ PUBLICATION = [
 
 class Post(models.Model):
     time_in = models.DateTimeField(auto_now_add=True)
-    article_or_news = models.CharField(max_length=30, choices = PUBLICATION, default = news)
-    title = models.CharField(max_length=30)
+    article_or_news = models.CharField(max_length=8, choices = PUBLICATION, default = news)
+    title = models.CharField(max_length=100)
     text = models.TextField()
     rating = models.IntegerField(default = 0)
 
