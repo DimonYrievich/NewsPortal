@@ -1,11 +1,14 @@
+
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
+<!-- Название у нас будет Новости -->
 {% block title %}
-{{ flatpage.title }}
+Articles
 {% endblock title %}
 
 {% block content %}
     <hr>
-    <h3>Здесь должны быть все статьи</h3>
-{{ flatpage.content }}
+    <h1>{{ articles.time_in|date:'d.m.Y' }}</h1>
 {% endblock content %}

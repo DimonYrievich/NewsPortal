@@ -1,15 +1,67 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+<!--Подключаем новый файл с созданным мной фильтром-->
+{% load custom_filters %}
+<!--Подключаем новый файл с созданным мной тегом-->
+<!--{% load custom_tags %}-->
 
-<!-- Название у нас будет Posts -->
-{% block title %}
-{{ flatpage.title }}
-{% endblock title %}
-
-<!-- В контенте на странице мы выводим все публикации -->
 {% block content %}
-<hr>
-<h1></h1>
-<p><p>Не понимаю, как сюда вывести все публикации(новости и статьи) из БД:(<p>
-    <p> HELP ME PLEASE !!!<p><p>
+    <h1>Все публикации</h1>
+    {# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+    <form action="" method="get">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p }}
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+    </form>
+
+    <hr>
+    {% if posts %}
+       <table>                                                   <!-- Начинаем описывать таблицу -->
+           <tr>                                                  <!-- Добавляем строку -->
+               <td>Категория</td>                                <!-- Добавляем ячейку в строку в соответствии с БД -->
+               <td>Заголовок</td>                                <!-- Добавляем ещё одну ячейку в строку -->
+               <td>Текст</td>                                    <!-- ... -->
+               <td>Автор</td>                                    <!-- ... -->
+               <td>Дата публикации</td>                          <!-- ... -->
+           </tr>                                                 <!-- Закрываем HTML-тег строки -->
+<!-- Для каждой публикации будете генерироваться новая строчка, т.е. новый HTML код, который указан в теле цикла.При этом сам цикл
+работает точно так же, как и в Python. post — переменная цикла, т.е. наша публикация получена из списка -->
+           {% for post in posts %}
+           <tr>
+               <td>{{ post.article_or_news }}</td>
+               <td>{{ post.title|censor }}</td>                  <!--Применим к тексту фильтр нежелательных слов)-->
+               <td>{{ post.text|truncatewords:15|censor }}</td>  <!--Применим фильтр к тексту (ограничим вывод текста до 15 слов + удаление нежелательных слов)-->
+               <td>{{ post.author_id }}</td>
+               <td>{{ post.time_in|date:'d.m.Y' }}</td>          <!--Применим фильтр к дате (с форматом вывода можно эксперементировать)-->
+           </tr>
+           {% endfor %}
+       </table>                                                  <!-- Закрываем HTML-тег таблицы -->
+    {% else %}
+       <h2>Публикаций нет!</h2>
+    {% endif %}
+
+    {# Добавляем пагинацию на страницу #}
+
+    {# Информация о предыдущих страницах #}
+    {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+    {% endif %}
+
+    {# Информация о текущей странице #}
+    {{ page_obj.number }}
+
+    {# Информация о следующих страницах #}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+
 {% endblock content %}

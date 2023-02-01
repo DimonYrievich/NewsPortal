@@ -1,8 +1,11 @@
+
 from django.db import models
 from django.contrib.auth.models import User    #Встроенная модель пользователей User
 from django.db.models import Sum
+from django.urls import reverse
+from django.core.validators import MinValueValidator
 
-#############################################################################################################
+########################################################################################################################
 
 class Author(models.Model):
     name_author = models.OneToOneField(User, on_delete=models.CASCADE)  #cвязь «один к одному» с встроенной моделью User
@@ -22,7 +25,7 @@ class Author(models.Model):
         self.rating = a + b + d
         self.save()
 
-#############################################################################################################
+########################################################################################################################
 
 sport = 'sp'
 politics = 'pol'
@@ -41,7 +44,10 @@ POSITIONS = [
 class Category(models.Model):
     name_category = models.CharField(max_length=10, choices = POSITIONS, default = technology, unique = True)
 
-###############################################################################################################
+    def __str__(self):
+        return self.name_category
+
+########################################################################################################################
 
 article = 'art'
 news = 'new'
@@ -82,13 +88,23 @@ class Post(models.Model):
         self.rating -= 1
         self.save()
 
-###############################################################################################################
+    # Дополнительно указываем метод __str__ у моделей.  Например, в панели администратора или в темплейте.
+    # Django будет их использовать, когда потребуется напечатать наш объект целиком.
+    # Как раз для вывода в HTML странице мы и указали, как должен выглядеть объект нашей модели (что именно нужно выводить).
+    def __str__(self):
+        return f'{self.title} {self.text[:10000]} {self.time_in} {self.author} {self.article_or_news} {self.categories} {self.rating}'
+
+    def get_absolute_url(self):
+        return reverse('posts_detail', args=[str(self.id)])
+
+
+########################################################################################################################
                                             #Промежуточная таблица
 class PostCategory(models.Model):
     post = models.ForeignKey("Post", on_delete=models.PROTECT)
     category = models.ForeignKey("Category", on_delete=models.PROTECT)
 
-###############################################################################################################
+########################################################################################################################
 
 class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE)      #связь «один ко многим» с моделью Post
@@ -114,7 +130,7 @@ class Comment(models.Model):
         self.rating_comment -= 1
         self.save()
 
-################################################################################################################
+########################################################################################################################
                                         # Это Проект News Portal
 #Что в нём должно быть?
 
