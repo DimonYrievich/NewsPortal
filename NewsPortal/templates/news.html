@@ -1,11 +1,40 @@
+
+
+<!--  !!!!!!!!!!!!!!КОСЯЧНЫЙ ШАБЛОН!!!!!!!!!!!!!!!!!!! -->
+
 {% extends 'flatpages/default.html' %}
-
-{% block title %}
-{{ flatpage.title }}
-{% endblock title %}
-
+{% load custom_filters %}
+<!--Подключаем новый файл с созданным мной тегом-->
+<!--{УДАЛИТЬ% load custom_tags %} -->
 {% block content %}
     <hr>
-    <h3>Здесь должны быть все новости</h3>
-{{ flatpage.content }}
+    {% if news %}
+        <table style="width: 441px;">
+            <tbody>
+                <tr style="height: 34px;">
+                    <td style="width: 116px; height: 34px; text-align: center;"><span style="color: #000000;">Дата</span></td>
+                    <td style="width: 155.438px; height: 34px; text-align: center;"><span style="color: #000000;">Автор</span></td>
+                    <td style="width: 207.562px; height: 34px; text-align: center;"><span style="color: #000000;">Категория</span></td>
+                    <td style="width: 237px; height: 34px; text-align: center;"><span style="color: #000000;">Рейтинг</span></td>
+                </tr>
+                {% for post in posts %}
+                <tr style="height: 34px;">
+                    <td style="width: 116px; height: 34px; text-align: center;">{{ news.time_in|date:'d.m.Y' }}</td>
+                    <td style="width: 155.438px; height: 34px; text-align: center;">{{ news.author_id }}</td>
+                    <td style="width: 207.562px; height: 34px; text-align: center;">{{ news.categories }}</td>
+                    <td style="width: 237px; height: 34px; text-align: center;">{{ news.rating }}</td>
+                </tr>
+                <tr style="height: 34px;">
+                    <td style="width: 716px; height: 34px; text-align: center;" colspan="4"><span style="color: #000000;">{{ news.title|censor }}</span></td>
+                </tr>
+                <tr style="height: 34px;">
+                    <td style="width: 716px; height: 34px; text-align: justify;" colspan="4"><span style="color: #000000;">{{ news.text|truncatewords:15|censor }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>&nbsp;</p>
+    {% else %}
+       <h2>Новостей нет!</h2>
+    {% endif %}
 {% endblock content %}

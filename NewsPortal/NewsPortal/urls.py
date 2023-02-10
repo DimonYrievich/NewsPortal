@@ -19,6 +19,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pages/', include('django.contrib.flatpages.urls')),
-    #Далее делаем так, чтобы все адреса из нашего приложения (news/urls.py) подключались к главному приложению с префиксом news/.
-	path('news/', include('news.urls'))
-]
+    # Далее делаем так, чтобы все адреса из нашего приложения (news/urls.py) подключались к главному приложению с префиксом cheburashka/ (оно же news/)
+    path('cheburashka/', include('news.urls')),
+    # Далее код для регистрации и авторизации
+    path('sign/', include('sign.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('', include('sign.urls'))
+    ]

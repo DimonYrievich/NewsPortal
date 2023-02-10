@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-rsfh(e)i0ec_em+1uzwxtn#^_e2hu59&mm=bq9=9rrzv-)d(*(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,12 +37,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'news',                         #добавлено
-    'django.contrib.sites',         #добавлено
-	'django.contrib.flatpages',     #добавлено
+    'news',                                     #добавлено
+    'django.contrib.sites',                     #добавлено
+	'django.contrib.flatpages',                 #добавлено
+    'django_filters',                           #добавлено
+    'sign',                                     #добавлено
+    'allauth',                                  #добавлено
+    'allauth.account',                          #добавлено
+    'allauth.socialaccount',                    #добавлено
+    # ... include the providers you want to enable (в нашем случае google):
+    'allauth.socialaccount.providers.google',   #добавлено
 ]
 
-SITE_ID = 1                         #добавлено
+SITE_ID = 1                                     #добавлено
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,8 +81,26 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'NewsPortal.wsgi.application'
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}                         # для создания групп пользователей
+
+
+LOGIN_URL = '/accounts/login/'                                                    # добавлено и изменено с '/sign/login/'
+LOGIN_REDIRECT_URL = '/'
+
+WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -92,18 +117,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 
