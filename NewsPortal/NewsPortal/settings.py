@@ -37,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'news',                                     #добавлено
+    'news.apps.NewsConfig',                     #добавлено и изменено с 'news' на 'news.apps.NewsConfig'
     'django.contrib.sites',                     #добавлено
 	'django.contrib.flatpages',                 #добавлено
+#    'fpages',                                   #добавлено
     'django_filters',                           #добавлено
     'sign',                                     #добавлено
     'allauth',                                  #добавлено
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',                    #добавлено
     # ... include the providers you want to enable (в нашем случае google):
     'allauth.socialaccount.providers.google',   #добавлено
+    "django_apscheduler",                       #добавлено (при создании команды "python manage.py runapscheduler")
 ]
 
 SITE_ID = 1                                     #добавлено
@@ -92,13 +94,13 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'none'                          #Можно указать 'mandatory' вместо 'none' для верификации при регистрации
 
-ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}                         # для создания групп пользователей
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}    # для создания групп пользователей
 
 
-LOGIN_URL = '/accounts/login/'                                                    # добавлено и изменено с '/sign/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/sign/login/'                     # для входа в систему
+LOGIN_REDIRECT_URL = '/'                       # cтраница авторизованного пользователя
 
 WSGI_APPLICATION = 'NewsPortal.wsgi.application'
 
@@ -149,3 +151,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+
+SITE_URL = 'http://127.0.0.1:8000'                  #Локальный хост
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'dmitry.glumin'
+EMAIL_HOST_PASSWORD = '322223'                      #пароль изменен, чтобы не палиться
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'dmitry.glumin@yandex.ru'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"       #указываем формат, когда будет производиться рассылка
+APSCHEDULER_RUN_NOW_TIMEOUT = 25                    #указываем время, за которое должна обрабатываться функция (в секундах)
+
+# CELERY_BROKER_URL = 'redis://:RkzLid3OVepJcJ56AMBcR8Z3omYrAsmd@redis-14624.c293.eu-central-1-1.ec2.cloud.redislabs.com:14624'
+# CELERY_RESULT_BACKEND = 'redis://:RkzLid3OVepJcJ56AMBcR8Z3omYrAsmd@redis-14624.c293.eu-central-1-1.ec2.cloud.redislabs.com:14624'
+# CELERY_ACCEPT_CONTENT = ['application/json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
