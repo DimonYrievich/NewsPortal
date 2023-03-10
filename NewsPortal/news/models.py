@@ -26,6 +26,9 @@ class Author(models.Model):
         self.rating = a + b + d
         self.save()
 
+    def __str__(self):
+        return self.name_author.username
+
 ########################################################################################################################
 
 sport = 'sp'
@@ -45,6 +48,7 @@ POSITIONS = [
 class Category(models.Model):
     objects = None              # ???????? добавлено автоматически, т.к. была неразрешенная ссылка на атрибут "объекты" для класса "Категория"
     name_category = models.CharField(max_length=10, choices = POSITIONS, default = technology, unique = True)
+    subscribers = models.ManyToManyField(User, related_name='categories')   #Поле subscribers (соотношение manytomany), в которое будут записываться пользователи, подписанные на обновления в данной категории.
 
     def __str__(self):
         return self.name_category
@@ -60,15 +64,14 @@ PUBLICATION = [
 ]
 
 class Post(models.Model):
+    objects = None             # ???????? добавлено автоматически, т.к. была неразрешенная ссылка на атрибут "объекты" для класса "Пост"
     time_in = models.DateTimeField(auto_now_add=True)
-    article_or_news = models.CharField(max_length=8, choices = PUBLICATION, default = news)
+    article_or_news = models.CharField(max_length=3, choices = PUBLICATION, default = news)
     title = models.CharField(max_length=100)
     text = models.TextField()
     rating = models.IntegerField(default = 0)
-
-    author = models.ForeignKey('Author', on_delete=models.CASCADE)  #связь «один ко многим» с моделью Author
-
-    categories = models.ManyToManyField('Category', through = 'PostCategory')  #связь «многие ко многим» с моделью Category
+    author = models.ForeignKey('Author', on_delete=models.CASCADE)             #связь «один ко многим» с моделью Author
+    categories = models.ManyToManyField('Category', through = 'PostCategory', related_name='post')  #связь «многие ко многим» с моделью Category
                                                                                # (с дополнительной моделью PostCategory);
     def preview(self):                    # Метод preview() модели Post, который возвращает начало статьи (предварительный
         return self.text[0:125] + "..."                     # просмотр) длиной 124 символа и добавляет многоточие в конце.
@@ -98,7 +101,6 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('posts_detail', args=[str(self.id)])
-
 
 ########################################################################################################################
                                             #Промежуточная таблица

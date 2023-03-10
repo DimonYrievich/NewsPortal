@@ -44,3 +44,20 @@ class PostFilter(FilterSet):
             # поиск по авторам
             #'categories': ['exact'],
         }
+
+########################################################################################
+#Пробник фильтров для создания публикаций (удалить, если не получится)
+#######################################################################################
+#class PostFilter(FilterSet):
+#    category = ModelChoiceFilter(
+#            field_name='categories',
+#            queryset=Category.objects.all(),
+#            label='Категория',
+#            empty_label='----------------'
+#        )
+#    author = ModelChoiceFilter(
+#        field_name='author',
+#        queryset=Author.objects.all(),
+#        label='Автор',
+#        empty_label='---------------------'
+#    )
