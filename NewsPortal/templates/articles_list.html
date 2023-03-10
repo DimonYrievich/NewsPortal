@@ -1,0 +1,27 @@
+
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block content %}
+<h1>Статьи</h1>
+<p>&nbsp;</p>
+<hr>
+    {% if articles %}
+        {% for articles in articles %}
+            <p style="text-align: left;">&nbsp;</p>
+            <p style="text-align: center;">{{ articles.title|censor }}</p>
+            <p style="text-align: left;">{{ articles.text|truncatewords:100|censor }}</p>
+            <p style="text-align: left;">&nbsp;</p>
+            <p style="text-align: left;">{{ articles.time_in|date:'d.m.Y' }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Категория:&nbsp;&nbsp;&nbsp;{% for categories in articles.categories.all %} <a href="{% url 'category_list' categories.id %}">{{ categories }}</a> {% endfor %}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Автор:&nbsp;&nbsp;&nbsp;{{ articles.author }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Рейтинг:&nbsp;&nbsp;&nbsp;{{ articles.rating }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Коментарии:&nbsp;&nbsp;&nbsp;{{ articles.text_comment }}&nbsp; &nbsp;&nbsp;</p>
+            <p style="text-align: left;">&nbsp;</p>
+            <hr>
+        {% endfor %}
+        {% else %}
+        <h2>Статей нет!</h2>
+    {% endif %}
+{% endblock content %}

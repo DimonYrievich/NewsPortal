@@ -1,0 +1,26 @@
+
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block content %}
+<h1>Новости</h1>
+<p>&nbsp;</p>
+    {% if is_not_subscriber %}
+        <p class="test-center"><a href="{% url 'subscribe' categories.id %}" class="btn btn-secondary btn-sm">Подписаться</a></p>
+    {% endif %}
+<hr>
+    {% if news %}
+        {% for news in category_news_list %}
+            <p style="text-align: left;">&nbsp;</p>
+            <p style="text-align: center;">{{ news.title|censor }}</p>
+            <p style="text-align: left;">{{ news.text|truncatewords:100|censor }}</p>
+            <p style="text-align: left;">&nbsp;</p>
+            <p style="text-align: left;">{{ news.time_in|date:'d.m.Y' }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Категория:&nbsp;&nbsp;&nbsp;{% for categories in news.categories.all %} <a href="{% url 'category_list' categories.id %}">{{ categories }}</a> {% endfor %}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Автор:&nbsp;&nbsp;&nbsp;{{ news.author }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Рейтинг:&nbsp;&nbsp;&nbsp;{{ news.rating }}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Коментарии:&nbsp;&nbsp;&nbsp;{{ news.text_comment }}&nbsp; &nbsp;&nbsp;</p>
+            <p style="text-align: left;">&nbsp;</p>
+            <hr>
+        {% endfor %}
+        {% else %}
+        <h2>Новостей нет!</h2>
+    {% endif %}
+{% endblock content %}
