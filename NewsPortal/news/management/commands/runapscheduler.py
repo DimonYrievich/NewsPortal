@@ -10,11 +10,10 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from news.models import Post, Category
+from NewsPortal.news.models import Post, Category
 
 
 logger = logging.getLogger(__name__)
-
 
 # наша задача по выводу текста на экран
 def my_job():
@@ -31,7 +30,7 @@ def my_job():
         }
     )
     msg = EmailMultiAlternatives(
-        subject='Статьи за неделю',
+        subject='Публикации за неделю',
         body='',
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=subscribers,

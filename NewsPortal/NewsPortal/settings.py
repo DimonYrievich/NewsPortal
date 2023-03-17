@@ -165,8 +165,12 @@ DEFAULT_FROM_EMAIL = 'dmitry.glumin@yandex.ru'
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"       #указываем формат, когда будет производиться рассылка
 APSCHEDULER_RUN_NOW_TIMEOUT = 25                    #указываем время, за которое должна обрабатываться функция (в секундах)
 
-# CELERY_BROKER_URL = 'redis://:RkzLid3OVepJcJ56AMBcR8Z3omYrAsmd@redis-14624.c293.eu-central-1-1.ec2.cloud.redislabs.com:14624'
-# CELERY_RESULT_BACKEND = 'redis://:RkzLid3OVepJcJ56AMBcR8Z3omYrAsmd@redis-14624.c293.eu-central-1-1.ec2.cloud.redislabs.com:14624'
-# CELERY_ACCEPT_CONTENT = ['application/json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
+
+#Если используется Redis Labs, то переменные CELERY_BROKER_URL и CELERY_RESULT_BACKEND должны строиться по шаблону:
+#redis://логин:пароль@endpoint:port (всё берется из конфигурации созданной новой базы данных в redis)
+CELERY_BROKER_URL = 'redis://:ZAYAGreQx6DfLRmMVjMze96VIPo8pKwp@redis-12964.c264.ap-south-1-1.ec2.cloud.redislabs.com:12964'
+CELERY_RESULT_BACKEND = 'redis://:ZAYAGreQx6DfLRmMVjMze96VIPo8pKwp@redis-12964.c264.ap-south-1-1.ec2.cloud.redislabs.com:12964'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
